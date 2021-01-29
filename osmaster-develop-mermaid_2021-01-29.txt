@@ -1,0 +1,33 @@
+graph
+    A[master_agent]
+    B[admaster_agent]
+    C[ADConnectService]
+    D[CP_공유환경]
+    E[CP_OS MASTER]
+    F[osmaster_agent]
+
+    A --- B
+    A -->|join| F
+    D -->|join| C
+    E -->|join| A
+
+    H[policy]
+    I[monitor]
+    J[rest_server]
+    K[pam]
+    L[nss]
+
+    F -.- H
+    F -.- I
+    J -->|monitor, policy, disjoin| F
+
+    K -->|login| F
+    L -->|pw,gr| F
+
+    M[OS Master Server]
+    F -->|request| M
+    M -->|monitor| J
+
+    G[sssd]
+    G --> K
+    G --> L    
