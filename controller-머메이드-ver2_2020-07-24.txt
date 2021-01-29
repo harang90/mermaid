@@ -1,0 +1,116 @@
+classDiagram
+  class global {
+    +ServiceHost host
+  }
+  class NetworkHelper {
+    -getRequestURL(string type) string
+    +getResource(Resource::type type, json postData, Session session) json
+    +postResource(Resource::type type, json postData, Session session) json
+    +requestLogin()
+  }
+  class ResourceFactory {
+    +JSONtoResource(type, JSON) Resource
+  }
+  class SecretParser {
+    +exportToFile(string path)
+    +importFromFile(string path) Secret
+  }
+  class Session {
+    -jession session
+  }
+  class Computer {
+    +string id
+    +string hostname
+    +string ip
+    +string position
+    +bool status
+    +string description
+    +Exam exam
+    +User user
+    +string startTime
+    +string createdDate
+    +string updatedDate
+  }
+  class Exam {
+    -string description
+    -string id
+    -string name
+    -int time
+    -string updateDate
+  }
+  class ExamRule {
+    -string data
+    -string examId
+    -int type
+    -string URL
+  }
+  class Resource {
+    +enum type
+    +toJSON()
+  }
+  class User {
+    +string id
+    +string password
+    +string uid
+    +int userType
+    +string email
+    +string description
+    +string createdDate
+    +string updatedDate
+  }
+  ResourceFactory -- Resource : creates
+  User --|> Resource
+  Computer --|> Resource
+  Exam --|> Resource
+  ExamRule --|> Resource
+  class LocalHelper {
+    +getHostname()
+  }
+  class ControllerService{
+    +registerMethod(ServieHost host)
+    -login(int type, vector<string> param) bool
+    -getUserById(int id) json_string
+    -getUserByName(string name) json_string
+    -getGroupById(int id) json_string
+    -getGroupByName(string name) json_string
+  }
+  class Login {
+    <<interface>>
+    +login(vector<string> param)
+    -SessionParser parser
+  }
+  class SessionParser {
+    +parse(string input) Session
+  }
+  class Secret {
+    +getData() string  
+  }
+  class UUID {
+    +string uuid
+  }
+  class UserLogin {
+    +login(vector<string> param)
+    -postLogin()
+  }
+  class SystemLogin {
+    +login(vector<string> param)
+    -postLogin()
+  }
+  class Join {
+    +login(vector<string> param)
+    -postLogin()
+  }
+  SessionParser --|> SecretParser
+  UUIDParser --|> SecretParser
+  Join --|> Login
+  SystemLogin --|> Login
+  UserLogin --|> Login
+  ControllerService -- NetworkHelper : uses
+  ControllerService -- LocalHelper : uses
+  ControllerService -- ResourceFactory : uses
+  SecretParser --|> Secret : produces
+  Session --|> Secret
+  UUID --|> Secret
+  class UUIDParser {
+    +parse(string input) UUID
+  }
